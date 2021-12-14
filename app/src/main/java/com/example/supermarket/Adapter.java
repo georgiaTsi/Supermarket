@@ -6,18 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private List<String> dataSet;
+    private FirstFragment firstFragment;
 
-    public Adapter(List<String> dataSet){
+    private List<FirstFragment.ItemClass> dataSet;
+
+    public Adapter(FirstFragment firstFragment, List<FirstFragment.ItemClass> dataSet){
+        this.firstFragment = firstFragment;
         this.dataSet = dataSet;
     }
 
@@ -30,7 +35,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textview.setText(dataSet.get(position));
+        holder.textview.setText(dataSet.get(position).Item);
+
+        holder.checkBox.setChecked(dataSet.get(position).IsChecked);
     }
 
     @Override
@@ -38,15 +45,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return dataSet.size();
     }
 
+    public void updateAdapter(List<FirstFragment.ItemClass> newDataset) {
+        dataSet = newDataset;
+
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView textview;
         private CheckBox checkBox;
+        private ImageButton delete;
 
         public ViewHolder(View view){
             super(view);
 
             textview = view.findViewById(R.id.textview_viewholder);
             checkBox = view.findViewById(R.id.checkbox_viewholder);
+            delete = view.findViewById(R.id.imagebutton_viewholder_delete);
 
             textview.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,6 +79,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     else{
                         textview.setPaintFlags(textview.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     }
+
+                    firstFragment.updateRow(textview.getText().toString(), isChecked);
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    firstFragment.deleteRow(textview.getText().toString());
                 }
             });
         }
