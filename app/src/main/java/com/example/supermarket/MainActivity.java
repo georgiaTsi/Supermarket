@@ -76,9 +76,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        initFabRecording();
+
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             checkPermission();
         }
+    }
+
+    private void initFabRecording(){
+        FloatingActionButton fabRecording = findViewById(R.id.fab_main_record);
+        fabRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+                if ((FirstFragment) fragment != null) {
+                    ((FirstFragment) fragment).initSpeechRecognizer(fabRecording);
+                }
+            }
+        });
     }
 
     private void checkPermission() {

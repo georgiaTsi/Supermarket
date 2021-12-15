@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -35,28 +38,21 @@ public class FirstFragment extends Fragment {
 
     Adapter adapter;
 
-    final Integer RecordAudioRequestCode = 1;
-    SpeechRecognizer speechRecognizer;
-
-    Button button;
+    boolean isRecording = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first, container, false);
 
-        button = view.findViewById(R.id.button_first);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview_main);
 
         initRecyclerView(recyclerView);
 
-        initSpeechRecognizer();
-
         return view;
     }
 
-    private void initSpeechRecognizer(){
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
+    public void initSpeechRecognizer(FloatingActionButton button){
+        SpeechRecognizer speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
 
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -69,8 +65,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onBeginningOfSpeech() {
-//                editText.setText("");
-//                editText.setHint("Listening...");
+                Toast.makeText(getActivity(), "Listening...", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -94,19 +89,19 @@ public class FirstFragment extends Fragment {
 //                micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 String result = data.get(0);
-                button.setText("Speech recognition");
+                //button.setText("Speech recognition");
 
                 if(result.contains("πρόσθεσε") || result.contains("add") || result.contains("and") || result.contains("αν")){
-                    String itemName = (result.split(" "))[1];//result.replace("πρόσθεσε ", "");
+                    String itemName = (result.split(" "))[1];
                     addItem(itemName);
                 }
                 else if(result.contains("delete") || result.contains("αφαίρεσε") || result.contains("αφαίρεση")){
-                    String itemName = (result.split(" "))[1];//result.replace("delete ", "");
+                    String itemName = (result.split(" "))[1];
                     updateRow(itemName, true);
                     updateRecyclerView();
                 }
-                else
-                    button.setText(result);
+//                else
+//                    button.setText(result);
             }
 
             @Override
@@ -123,7 +118,6 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 if(!isRecording) {
                     speechRecognizer.startListening(speechRecognizerIntent);
-                    button.setText("Recording...");
                 }
                 else {
                     speechRecognizer.stopListening();
@@ -134,20 +128,7 @@ public class FirstFragment extends Fragment {
         });
     }
 
-    boolean isRecording = false;
-
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-//        view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-//            }
-//        });
-    }
-
+    //region RecyclerView
     private void initRecyclerView(RecyclerView recyclerView){
         ArrayList<ItemClass> items = readFromDatabase();
 
@@ -206,6 +187,7 @@ public class FirstFragment extends Fragment {
         String query = String.format("UPDATE SupermarketList SET IsChecked = '%b' WHERE Item = '" + item + "'", isChecked);
         myDatabase.execSQL(query);
     }
+    //endregion
 
     public class ItemClass{
         public String Item;
