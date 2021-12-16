@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
                         // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
         });
@@ -85,17 +84,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFabRecording(){
         FloatingActionButton fabRecording = findViewById(R.id.fab_main_record);
-        fabRecording.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
 
-                if ((FirstFragment) fragment != null) {
-                    ((FirstFragment) fragment).initSpeechRecognizer(fabRecording);
-                }
-            }
-        });
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+        if ((FirstFragment) fragment != null) {
+            ((FirstFragment) fragment).initSpeechRecognizer(fabRecording);
+        }
     }
 
     private void checkPermission() {

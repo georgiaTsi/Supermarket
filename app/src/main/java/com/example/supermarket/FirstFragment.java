@@ -2,7 +2,9 @@ package com.example.supermarket;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -118,9 +120,13 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 if(!isRecording) {
                     speechRecognizer.startListening(speechRecognizerIntent);
+
+                    button.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
                 }
                 else {
                     speechRecognizer.stopListening();
+
+                    button.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(213,181,253)));
                 }
 
                 isRecording = !isRecording;
