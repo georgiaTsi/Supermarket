@@ -88,22 +88,18 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onResults(Bundle bundle) {
-//                micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 String result = data.get(0);
-                //button.setText("Speech recognition");
 
                 if(result.contains("πρόσθεσε") || result.contains("add") || result.contains("and") || result.contains("αν")){
-                    String itemName = (result.split(" "))[1];
+                    String itemName = (result.split(" ", 2))[1];
                     addItem(itemName);
                 }
                 else if(result.contains("delete") || result.contains("αφαίρεσε") || result.contains("αφαίρεση")){
-                    String itemName = (result.split(" "))[1];
+                    String itemName = (result.split(" ", 2))[1];
                     updateRow(itemName, true);
                     updateRecyclerView();
                 }
-//                else
-//                    button.setText(result);
             }
 
             @Override
