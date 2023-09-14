@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 33
+    buildToolsVersion '33.0.1'
 
     defaultConfig {
         applicationId "com.example.supermarket"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -26,6 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.example.supermarket'
 }
 
 dependencies {
