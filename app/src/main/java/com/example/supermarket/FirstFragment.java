@@ -111,22 +111,19 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!isRecording) {
-                    speechRecognizer.startListening(speechRecognizerIntent);
+        button.setOnClickListener(view -> {
+            if(!isRecording) {
+                speechRecognizer.startListening(speechRecognizerIntent);
 
-                    button.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                }
-                else {
-                    speechRecognizer.stopListening();
-
-                    button.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(213,181,253)));
-                }
-
-                isRecording = !isRecording;
+                button.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
             }
+            else {
+                speechRecognizer.stopListening();
+
+                button.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(213,181,253)));
+            }
+
+            isRecording = !isRecording;
         });
     }
 
@@ -146,7 +143,7 @@ public class FirstFragment extends Fragment {
 
     private ArrayList<ItemClass> readFromDatabase(){
 
-        ArrayList<ItemClass> items = new ArrayList<ItemClass>();
+        ArrayList<ItemClass> items = new ArrayList<>();
 
         try {
             myDatabase = this.getActivity().openOrCreateDatabase("SupermarketDatabase", Context.MODE_PRIVATE, null);

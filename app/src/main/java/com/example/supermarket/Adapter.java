@@ -63,33 +63,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             checkBox = view.findViewById(R.id.checkbox_viewholder);
             delete = view.findViewById(R.id.imagebutton_viewholder_delete);
 
-            textview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    checkBox.setChecked(!checkBox.isChecked());
+            textview.setOnClickListener(view1 -> checkBox.setChecked(!checkBox.isChecked()));
+
+            checkBox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                if(isChecked){
+                    textview.setPaintFlags(textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
+                else{
+                    textview.setPaintFlags(textview.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+
+                firstFragment.updateRow(textview.getText().toString(), isChecked);
             });
 
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    if(isChecked){
-                        textview.setPaintFlags(textview.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }
-                    else{
-                        textview.setPaintFlags(textview.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                    }
-
-                    firstFragment.updateRow(textview.getText().toString(), isChecked);
-                }
-            });
-
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    firstFragment.deleteRow(textview.getText().toString());
-                }
-            });
+            delete.setOnClickListener(view12 -> firstFragment.deleteRow(textview.getText().toString()));
         }
     }
 }
